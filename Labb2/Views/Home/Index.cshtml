@@ -1,0 +1,39 @@
+﻿@model Labb2.Models.ChampionViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link rel="stylesheet" href="~/css/styles.css" />
+
+<div class="content-container">
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" onkeyup="searchChampions()" placeholder="Search for champions...">
+    </div>
+
+    <!-- Buttons for Toggling Tables -->
+    <div class="button-container">
+        <button onclick="toggleTables('left')">By Name</button>
+        <button onclick="toggleTables('right')">By Release</button>
+    </div>
+
+    <!-- Flex Container for Champions -->
+    <div class="champion-container">
+        @foreach (var champion in Model.ChampionsByName)
+        {
+            <div class="champion-cell">
+                <img src="@champion.ImageUrl" alt="@champion.Name" />
+                <span class="champion-name">@champion.Name</span>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/filtering.js"></script>
+    <script src="~/js/search.js"></script>
+}
