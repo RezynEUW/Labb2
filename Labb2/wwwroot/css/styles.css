@@ -18,40 +18,18 @@ button {
         background-color: #555555; /* Lighter background when hovering over buttons */
     }
 
-.center-screen {
-    display: flex;
-    flex-direction: column; /* Stack elements vertically */
-    align-items: center; /* Center align items */
-    justify-content: center; /* Center vertically */
-    position: absolute; /* Positioning it absolutely */
-    left: 0;
-    right: 0;
-    top: 100px; /* Adjusted to give space for the header */
-    bottom: 60px; /* Adjusted to give space for the footer */
-    padding: 20px; /* Add padding around the content */
-}
-
-
 .button-container button {
-    width: 150px; /* Set a fixed width for both buttons */
     /* Other styles */
-    background-color: #333333;
-    color: #ffffff;
-    border: none;
-    padding: 7px 7px;
-    margin: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 20px;
+    width: 150px; /* Fixed width */
+    text-overflow: ellipsis; /* Handle overflowing text */
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflow */
+    /* Rest of your button styles */
 }
-
-    .button-container button:hover {
-        background-color: #555555;
-    }
 
 .search-bar {
     margin-bottom: 20px;
+    margin-top: 8px;
 }
 
     .search-bar input[type="text"] {
@@ -61,7 +39,6 @@ button {
         padding: 7px 10px; /* Adjusted padding for the input field */
         border-radius: 5px; /* Rounded corners for the input field */
         width: 200px; /* Adjust width as needed */
-        margin-bottom: 0px; /* Space below the search bar */
         height: 36px; /* Adjust height to match buttons */
         text-align: center; /* Center the text inside the input field */
     }
@@ -76,24 +53,6 @@ button {
             border-color: #777777; /* Change border color on focus */
         }
 
-
-
-
-/* Existing styles remain unchanged */
-
-/* Adjust the maximum width of the content container */
-.content-container {
-    max-width: 800px; /* Adjust the width as needed */
-    margin: auto; /* Center the container */
-    padding: 20px;
-    min-height: 100vh; /* Minimum height set to 100% of the viewport height */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-/* Grid layout for champion containers */
 .champion-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr); /* Creates a 5-column grid */
@@ -102,7 +61,6 @@ button {
     margin-bottom: 20px; /* Space below each row */
 }
 
-/* Styling for individual champion cells */
 .champion-cell {
     text-align: center;
     min-width: 60px; /* Minimum width for each cell */
@@ -111,7 +69,6 @@ button {
     align-items: center;
 }
 
-/* Ensure images and text within cells are properly aligned */
 img {
     width: 60px; /* Fixed width for images */
     height: auto;
@@ -129,7 +86,6 @@ img {
     color: #bbbbbb; /* Darker grey color */
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .champion-cell {
         width: calc(20% - 10px); /* Maintain 5 items per row */
@@ -138,4 +94,51 @@ img {
     .champion-container {
         width: 100%; /* Full width on smaller screens */
     }
+    .left-half .content-container {
+        width: 100%; /* Adjust width as needed for smaller screens */
+        /* Rest of your responsive adjustments */
+    }
+}
+
+.content-container {
+    max-width: 800px; /* Adjust the width as needed */
+    margin: auto; /* Center the container */
+    padding: 20px;
+    min-height: 100vh; /* Minimum height set to 100% of the viewport height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.main-container {
+    display: flex; /* Use flexbox for layout */
+    min-height: calc(100vh - 60px); /* Full height minus the header height */
+}
+
+
+.left-half {
+    flex: 0 0 50%; /* Fixed to 50% width, not flexible */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    background-color: #2e2e2e; /* Different background color for left half */
+}
+
+    .left-half .content-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Keep this to center-align horizontally */
+        justify-content: flex-start; /* Align to the start (top) vertically */
+        width: 100%;
+        height: 100%; /* Ensure it takes the full height of its parent */
+        /* Add any additional styles needed for padding, margins, etc. */
+    }
+
+.right-half {
+    flex: 0 0 50%; /* Fixed width of 300px */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    background-color: cadetblue; /* Different background color for right half */
 }
