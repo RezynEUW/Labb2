@@ -22,21 +22,25 @@ public class HomeController : Controller
     // Asynchronous action method to fetch data from the database
     public async Task<IActionResult> Index()
     {
-        // Fetching and sorting champions by name
+        // Normal sorting
         var championsByName = await _context.Champions.OrderBy(c => c.Name).ToListAsync();
+        var championsByReleaseDate = await _context.Champions.OrderBy(c => c.ReleaseDate).ToListAsync();
 
-        // Fetching and sorting champions by release date
-        var championsByReleaseDate = await _context.Champions.OrderByDescending(c => c.ReleaseDate).ToListAsync();
+        // Reverse sorting
+        var championsByNameDesc = await _context.Champions.OrderByDescending(c => c.Name).ToListAsync();
+        var championsByReleaseDateDesc = await _context.Champions.OrderByDescending(c => c.ReleaseDate).ToListAsync();
 
-        // Creating a ViewModel to pass to the view
         var viewModel = new ChampionViewModel
         {
             ChampionsByName = championsByName,
-            ChampionsByReleaseDate = championsByReleaseDate
+            ChampionsByReleaseDate = championsByReleaseDate,
+            ChampionsByNameDesc = championsByNameDesc,
+            ChampionsByReleaseDateDesc = championsByReleaseDateDesc
         };
 
-        return View(viewModel); // Passing the ViewModel to the view
+        return View(viewModel);
     }
+
 
     public IActionResult Privacy()
     {

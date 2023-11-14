@@ -58,14 +58,17 @@ button {
         background-color: #333333; /* Dark background for the input field */
         color: #ffffff; /* White text color for better visibility */
         border: 1px solid #555555; /* Dark border color */
-        padding: 10px; /* Padding for the input field */
+        padding: 7px 10px; /* Adjusted padding for the input field */
         border-radius: 5px; /* Rounded corners for the input field */
         width: 200px; /* Adjust width as needed */
         margin-bottom: 0px; /* Space below the search bar */
+        height: 36px; /* Adjust height to match buttons */
+        text-align: center; /* Center the text inside the input field */
     }
 
         .search-bar input[type="text"]::placeholder {
             color: #aaaaaa; /* Lighter color for the placeholder text */
+            text-align: center; /* Center the placeholder text */
         }
 
         .search-bar input[type="text"]:focus {
@@ -74,53 +77,11 @@ button {
         }
 
 
-.champion-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Creates a 5-column grid */
-    gap: 5px; /* Adjusted space between grid items */
-    width: 60%; /* Full width of the container */
-    margin-bottom: 10px; /* Space below each row */
-}
-
-.champion-cell {
-    text-align: center;
-    min-width: 60px; /* Minimum width for each cell */
-    margin-bottom: 10px; /* Space below each cell */
-}
-
-/* Other styles remain the same */
 
 
-img {
-    width: 60px; /* Fixed width for images */
-    height: auto;
-    display: block;
-    margin: 0 auto; /* Center images */
-}
+/* Existing styles remain unchanged */
 
-.champion-name {
-    font-size: 10px;
-    margin-top: 5px;
-}
-
-.champion-release-date {
-    display: block; /* Ensures the date appears on a new line */
-    font-size: 9px; /* Slightly smaller font size */
-    color: #bbbbbb; /* Darker grey color */
-    margin-top: 3px; /* Space above the release date */
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .champion-cell {
-        width: calc(20% - 10px); /* Maintain 5 items per row */
-    }
-
-    .champion-container {
-        width: calc(5 * 20% + 10 * 5px); /* Adjust width for 5 cells and their margins */
-    }
-}
-
+/* Adjust the maximum width of the content container */
 .content-container {
     max-width: 800px; /* Adjust the width as needed */
     margin: auto; /* Center the container */
@@ -132,3 +93,49 @@ img {
     text-align: center;
 }
 
+/* Grid layout for champion containers */
+.champion-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* Creates a 5-column grid */
+    gap: 10px; /* Space between grid items */
+    width: 60%; /* Full width of the container */
+    margin-bottom: 20px; /* Space below each row */
+}
+
+/* Styling for individual champion cells */
+.champion-cell {
+    text-align: center;
+    min-width: 60px; /* Minimum width for each cell */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Ensure images and text within cells are properly aligned */
+img {
+    width: 60px; /* Fixed width for images */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Center images */
+}
+
+.champion-name, .champion-release-date {
+    font-size: 10px;
+    margin-top: 5px;
+    color: #ffffff; /* White text color for better visibility */
+}
+
+.champion-release-date {
+    color: #bbbbbb; /* Darker grey color */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .champion-cell {
+        width: calc(20% - 10px); /* Maintain 5 items per row */
+    }
+
+    .champion-container {
+        width: 100%; /* Full width on smaller screens */
+    }
+}
