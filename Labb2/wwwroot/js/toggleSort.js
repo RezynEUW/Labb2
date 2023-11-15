@@ -18,8 +18,7 @@
             document.getElementById('championContainerByName').style.display = 'grid';
             nameSortButton.textContent = 'Z-A';
         }
-        // Reset the Release button to its default state
-        // releaseSortButton.textContent = 'New';
+
     } else if (sortType === 'release') {
         if (releaseSortButton.textContent.includes('New')) {
             document.getElementById('championContainerByReleaseDesc').style.display = 'grid';
@@ -28,7 +27,5 @@
             document.getElementById('championContainerByRelease').style.display = 'grid';
             releaseSortButton.textContent = 'New';
         }
-        // Reset the Name button to its default state
-        // nameSortButton.textContent = 'A-Z';
     }
 }

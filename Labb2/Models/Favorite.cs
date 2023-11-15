@@ -1,20 +1,15 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace YourNamespace // Replace with your actual namespace
+﻿namespace Labb2.Models
 {
     public class Favorite
     {
-        [Key]
-        public int FavoriteId { get; set; }
+        public int FavoriteId { get; set; } // Primary key
+        public int UserId { get; set; }     // Foreign key to User
+        public int ChampionId { get; set; } // Foreign key to Champion
 
-        [Required]
-        public int ChampionId { get; set; }
+        // Navigation properties
+        public virtual User User { get; set; }
+        public virtual Champion Champion { get; set; }
 
-        // Navigation property for the related Champion
-        // Establishes a one-to-many relationship with the Champion table
-        [ForeignKey("ChampionId")]
-        public Champion Champion { get; set; }
+        // Add any additional properties or navigation properties if required
     }
 }

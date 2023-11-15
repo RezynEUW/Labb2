@@ -14,10 +14,9 @@
     <!-- Left Half -->
     <div class="left-half">
         <div class="content-container">
-
             <!-- Sorting Label -->
             <div class="sorting-label">
-                <span style="color: #444444; font-size: 18px; margin-bottom: 20px">Sort by</span>
+                <span style="color: #444444; font-size: 18px; margin-bottom: 20px">All Champions</span>
             </div>
 
             <!-- Buttons for Toggling Tables -->
@@ -31,7 +30,7 @@
                 <input type="text" id="searchInput" onkeyup="searchChampions()" placeholder="Champion Name">
             </div>
 
-            <!-- Container for Champions Sorted by Name (Ascending) -->
+            <!-- Champion Containers -->
             <div id="championContainerByName" class="champion-container">
                 @foreach (var champion in Model.ChampionsByName)
                 {
@@ -43,7 +42,6 @@
                 }
             </div>
 
-            <!-- Container for Champions Sorted by Name (Descending), initially hidden -->
             <div id="championContainerByNameDesc" class="champion-container" style="display: none;">
                 @foreach (var champion in Model.ChampionsByNameDesc)
                 {
@@ -55,7 +53,6 @@
                 }
             </div>
 
-            <!-- Container for Champions Sorted by Release Date (Ascending), initially hidden -->
             <div id="championContainerByRelease" class="champion-container" style="display: none;">
                 @foreach (var champion in Model.ChampionsByReleaseDate)
                 {
@@ -67,7 +64,6 @@
                 }
             </div>
 
-            <!-- Container for Champions Sorted by Release Date (Descending), initially hidden -->
             <div id="championContainerByReleaseDesc" class="champion-container" style="display: none;">
                 @foreach (var champion in Model.ChampionsByReleaseDateDesc)
                 {
@@ -80,15 +76,85 @@
             </div>
         </div>
     </div>
+    <div class="right-half">
+        <div class="content-container">
+            <!-- Sorting Label -->
+            <div class="sorting-label">
+                <span style="color: #444444; font-size: 18px; margin-bottom: 20px">Favorite Champions</span>
+            </div>
+
+            <!-- Buttons for Toggling Favorites Sorting -->
+            <div class="button-container">
+                <button id="toggleFavoriteNameSort" onclick="toggleSortFavorite('Name')">Z-A</button>
+                <button id="toggleFavoriteReleaseSort" onclick="toggleSortFavorite('ReleaseDate')">New</button>
+            </div>
+
+            <!-- Search Bar for Favorites -->
+            <div class="search-bar">
+                <input type="text" id="searchFavoriteInput" onkeyup="searchFavoriteChampions()" placeholder="Champion Name">
+            </div>
+
+            <!-- Containers for each sorting order of favorites -->
+            <div id="favoriteContainerByName" class="champion-container">
+                @foreach (var champion in Model.FavoriteChampions)
+                {
+                    <div class="favorite-champion-cell" onclick="removeFromFavorites('@champion.ChampionId')">
+                        <img src="@champion.ImageUrl" alt="@champion.Name" />
+                        <span class="champion-name">@champion.Name</span>
+                        <span class="champion-release-date">@champion.ReleaseDate.ToString("yyyy-MM-dd")</span>
+                    </div>
+                }
+            </div>
+
+            <div id="favoriteContainerByNameDesc" class="champion-container" style="display: none;">
+                @foreach (var champion in Model.FavoriteChampionsDesc)
+                {
+                    <div class="favorite-champion-cell" onclick="removeFromFavorites('@champion.ChampionId')">
+                        <img src="@champion.ImageUrl" alt="@champion.Name" />
+                        <span class="champion-name">@champion.Name</span>
+                        <span class="champion-release-date">@champion.ReleaseDate.ToString("yyyy-MM-dd")</span>
+                    </div>
+                }
+            </div>
+
+            <div id="favoriteContainerByReleaseDate" class="champion-container" style="display: none;">
+                @foreach (var champion in Model.FavoriteChampionsR)
+                {
+                    <div class="favorite-champion-cell" onclick="removeFromFavorites('@champion.ChampionId')">
+                        <img src="@champion.ImageUrl" alt="@champion.Name" />
+                        <span class="champion-name">@champion.Name</span>
+                        <span class="champion-release-date">@champion.ReleaseDate.ToString("yyyy-MM-dd")</span>
+                    </div>
+                }
+            </div>
+
+            <div id="favoriteContainerByReleaseDateDesc" class="champion-container" style="display: none;">
+                @foreach (var champion in Model.FavoriteChampionsRDesc)
+                {
+                    <div class="favorite-champion-cell" onclick="removeFromFavorites('@champion.ChampionId')">
+                        <img src="@champion.ImageUrl" alt="@champion.Name" />
+                        <span class="champion-name">@champion.Name</span>
+                        <span class="champion-release-date">@champion.ReleaseDate.ToString("yyyy-MM-dd")</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 
 @section Scripts {
     <script src="~/js/filtering.js"></script>
     <script src="~/js/search.js"></script>
+    <script src="~/js/searchFavoriteChampions.js"></script>
     <script src="~/js/toggleSort.js"></script>
-    <script>// JavaScript function to add a champion to favorites
-        function addToFavorites(championId) {
-            // Implement AJAX call to add the champion to the Favorites table
-            // Refresh the Favorites list display
-        }</script>
+    <script src="~/js/toggleSortFavorite.js"></script>
+    <script>
+        var addToFavoritesUrl = '@Url.Action("AddToFavorites", "Home")';
+        var removeFromFavoritesUrl = '@Url.Action("RemoveFromFavorites", "Home")';
+    </script>
+    <script src="~/js/addToFavorites.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 }

@@ -7,107 +7,117 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using System.Linq;
-using System.Collections.Generic; // Needed for List
+using System.Threading.Tasks;
 
-namespace Labb2.Controllers;
-
-public class HomeController : Controller
+namespace Labb2.Controllers
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly LeagueCheckerDbContext _context;
-    private static List<int> FavoriteChampions = new List<int>(); // Simulated storage for favorites
-
-    public HomeController(ILogger<HomeController> logger, LeagueCheckerDbContext context)
+    public class HomeController : Controller
     {
-        _logger = logger;
-        _context = context;
-    }
+        private readonly ILogger<HomeController> _logger;
+        private readonly LeagueCheckerDbContext _context;
 
-    public IActionResult Login()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model)
-    {
-        if (ModelState.IsValid)
+        public HomeController(ILogger<HomeController> logger, LeagueCheckerDbContext context)
         {
-            // Replace this with your user validation logic
-            var user = _context.Users
-                        .FirstOrDefault(u => u.Username == model.Username && u.Password == model.Password);
+            _logger = logger;
+            _context = context;
+        }
 
-            if (user != null)
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
             {
-                var claims = new List<Claim>
+                var user = _context.Users.FirstOrDefault(u => u.Username == model.Username && u.Password == model.Password);
+
+                if (user != null)
                 {
-                    new Claim(ClaimTypes.Name, user.Username)
-                };
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.Username),
+                        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+                    };
 
-                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                var principal = new ClaimsPrincipal(identity);
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var principal = new ClaimsPrincipal(identity);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                }
             }
-            else
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var championsByName = await _context.Champions.OrderBy(c => c.Name).ToListAsync();
+            var championsByReleaseDate = await _context.Champions.OrderBy(c => c.ReleaseDate).ToListAsync();
+            var championsByNameDesc = await _context.Champions.OrderByDescending(c => c.Name).ToListAsync();
+            var championsByReleaseDateDesc = await _context.Champions.OrderByDescending(c => c.ReleaseDate).ToListAsync();
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var favoriteChampions = new List<Champion>();
+
+            if (!string.IsNullOrEmpty(userId))
             {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                var userFavorites = _context.Favorites.Where(f => f.UserId.ToString() == userId);
+                favoriteChampions = await userFavorites.Select(f => f.Champion).ToListAsync();
             }
+
+            var viewModel = new ChampionViewModel
+            {
+                ChampionsByName = championsByName,
+                ChampionsByReleaseDate = championsByReleaseDate,
+                ChampionsByNameDesc = championsByNameDesc,
+                ChampionsByReleaseDateDesc = championsByReleaseDateDesc,
+
+                FavoriteChampions = favoriteChampions.OrderBy(c => c.Name).ToList(),
+                FavoriteChampionsR = favoriteChampions.OrderBy(c => c.ReleaseDate).ToList(),
+                FavoriteChampionsDesc = favoriteChampions.OrderByDescending(c => c.Name).ToList(),
+                FavoriteChampionsRDesc = favoriteChampions.OrderByDescending(c => c.ReleaseDate).ToList()
+            };
+
+            return View(viewModel);
         }
 
-        return View(model);
-    }   
-
-
-    public async Task<IActionResult> Index()
-    {
-        var championsByName = await _context.Champions.OrderBy(c => c.Name).ToListAsync();
-        var championsByReleaseDate = await _context.Champions.OrderBy(c => c.ReleaseDate).ToListAsync();
-        var championsByNameDesc = await _context.Champions.OrderByDescending(c => c.Name).ToListAsync();
-        var championsByReleaseDateDesc = await _context.Champions.OrderByDescending(c => c.ReleaseDate).ToListAsync();
-
-        var viewModel = new ChampionViewModel
+        [HttpPost]
+        public async Task<IActionResult> AddToFavorites(int championId)
         {
-            ChampionsByName = championsByName,
-            ChampionsByReleaseDate = championsByReleaseDate,
-            ChampionsByNameDesc = championsByNameDesc,
-            ChampionsByReleaseDateDesc = championsByReleaseDateDesc
-        };
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var alreadyFavorite = _context.Favorites.Any(f => f.UserId.ToString() == userId && f.ChampionId == championId);
+                if (!alreadyFavorite)
+                {
+                    var favorite = new Favorite { UserId = int.Parse(userId), ChampionId = championId };
+                    _context.Favorites.Add(favorite);
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, message = "Added to favorites successfully!" });
+                }
+            }
 
-        return View(viewModel);
-    }
-
-    [HttpPost]
-    public IActionResult AddToFavorites(int championId)
-    {
-        if (!FavoriteChampions.Contains(championId))
-        {
-            FavoriteChampions.Add(championId);
+            return Json(new { success = false, message = "Error adding to favorites or user not authenticated." });
         }
 
-        // In a real application, save the updated list to a database
-        return Json(new { success = true, message = "Added to favorites successfully!" });
-    }
+        public IActionResult Privacy()
+        {
+            return View();
+        }
 
-    [HttpPost]
-    public IActionResult RemoveFromFavorites(int championId)
-    {
-        FavoriteChampions.Remove(championId);
-
-        // In a real application, update the database
-        return Json(new { success = true, message = "Removed from favorites successfully!" });
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }
