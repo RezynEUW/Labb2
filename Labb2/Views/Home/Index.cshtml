@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="~/css/styles.css" />
 
 <div class="text-center">
-    <h2 class="display-4">Welcome</h2>
+    <h3 class="display-4">LeagueChecker</h3>
 </div>
 
 <!-- Main Container -->
@@ -35,7 +35,7 @@
             <div id="championContainerByName" class="champion-container">
                 @foreach (var champion in Model.ChampionsByName)
                 {
-                    <div class="champion-cell">
+                    <div class="champion-cell" onclick="addToFavorites('@champion.ChampionId')">
                         <img src="@champion.ImageUrl" alt="@champion.Name" />
                         <span class="champion-name">@champion.Name</span>
                         <span class="champion-release-date">@champion.ReleaseDate.ToString("yyyy-MM-dd")</span>
@@ -47,7 +47,7 @@
             <div id="championContainerByNameDesc" class="champion-container" style="display: none;">
                 @foreach (var champion in Model.ChampionsByNameDesc)
                 {
-                    <div class="champion-cell">
+                    <div class="champion-cell" onclick="addToFavorites('@champion.ChampionId')">
                         <img src="@champion.ImageUrl" alt="@champion.Name" />
                         <span class="champion-name">@champion.Name</span>
                         <span class="champion-release-date">@champion.ReleaseDate.ToString("yyyy-MM-dd")</span>
@@ -59,7 +59,7 @@
             <div id="championContainerByRelease" class="champion-container" style="display: none;">
                 @foreach (var champion in Model.ChampionsByReleaseDate)
                 {
-                    <div class="champion-cell">
+                    <div class="champion-cell" onclick="addToFavorites('@champion.ChampionId')">
                         <img src="@champion.ImageUrl" alt="@champion.Name" />
                         <span class="champion-name">@champion.Name</span>
                         <span class="champion-release-date">@champion.ReleaseDate.ToString("yyyy-MM-dd")</span>
@@ -71,7 +71,7 @@
             <div id="championContainerByReleaseDesc" class="champion-container" style="display: none;">
                 @foreach (var champion in Model.ChampionsByReleaseDateDesc)
                 {
-                    <div class="champion-cell">
+                    <div class="champion-cell" onclick="addToFavorites('@champion.ChampionId')">
                         <img src="@champion.ImageUrl" alt="@champion.Name" />
                         <span class="champion-name">@champion.Name</span>
                         <span class="champion-release-date">@champion.ReleaseDate.ToString("yyyy-MM-dd")</span>
@@ -81,10 +81,14 @@
         </div>
     </div>
 </div>
-    
 
-    @section Scripts {
-        <script src="~/js/filtering.js"></script>
-        <script src="~/js/search.js"></script>
-        <script src="~/js/toggleSort.js"></script>
-    }
+@section Scripts {
+    <script src="~/js/filtering.js"></script>
+    <script src="~/js/search.js"></script>
+    <script src="~/js/toggleSort.js"></script>
+    <script>// JavaScript function to add a champion to favorites
+        function addToFavorites(championId) {
+            // Implement AJAX call to add the champion to the Favorites table
+            // Refresh the Favorites list display
+        }</script>
+}

@@ -15,6 +15,8 @@ namespace Labb2.Data
         public DbSet<Class> Classes { get; set; }
         public DbSet<ChampionRole> ChampionRoles { get; set; }
         public DbSet<ChampionClass> ChampionClasses { get; set; }
+        public DbSet<User> Users { get; set; }
+        // public DbSet<Favorites> Favorites { get; set; }
 
         // ... other DbSets and model configurations
     }
