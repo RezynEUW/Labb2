@@ -1,4 +1,4 @@
 USE LeagueChecker;
 
 INSERT INTO Users (Username, Password)
-VALUES ('TestUser', 'TestPassword123');
+VALUES ('1', '1');

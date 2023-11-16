@@ -13,11 +13,12 @@ builder.Services.AddDbContext<LeagueCheckerDbContext>(options =>
 
 // Add cookie-based authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie(options =>
-        {
-            options.LoginPath = "/Home/Login"; // or the path to your login action
-            options.AccessDeniedPath = "/Home/AccessDenied"; // path to access denied action, if you have one
-        });
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Home/Login"; // or the path to your login action
+        options.AccessDeniedPath = "/Home/AccessDenied"; // path to access denied action, if you have one
+        // Additional configuration options, if needed
+    });
 
 var app = builder.Build();
 
@@ -39,6 +40,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Login}/{id?}");
 
 app.Run();

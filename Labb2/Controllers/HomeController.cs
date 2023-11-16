@@ -80,7 +80,6 @@ namespace Labb2.Controllers
                 ChampionsByReleaseDate = championsByReleaseDate,
                 ChampionsByNameDesc = championsByNameDesc,
                 ChampionsByReleaseDateDesc = championsByReleaseDateDesc,
-
                 FavoriteChampions = favoriteChampions.OrderBy(c => c.Name).ToList(),
                 FavoriteChampionsR = favoriteChampions.OrderBy(c => c.ReleaseDate).ToList(),
                 FavoriteChampionsDesc = favoriteChampions.OrderByDescending(c => c.Name).ToList(),
@@ -93,6 +92,11 @@ namespace Labb2.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToFavorites(int championId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Json(new { success = false, message = "User not authenticated." });
+            }
+
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!string.IsNullOrEmpty(userId))
             {
@@ -104,9 +108,54 @@ namespace Labb2.Controllers
                     await _context.SaveChangesAsync();
                     return Json(new { success = true, message = "Added to favorites successfully!" });
                 }
+                else
+                {
+                    return Json(new { success = false, message = "Already a favorite." });
+                }
             }
 
-            return Json(new { success = false, message = "Error adding to favorites or user not authenticated." });
+            return Json(new { success = false, message = "Error adding to favorites." });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromFavorites(int championId)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Json(new { success = false, message = "User not authenticated." });
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var favoriteToRemove = await _context.Favorites.FirstOrDefaultAsync(f => f.UserId.ToString() == userId && f.ChampionId == championId);
+                if (favoriteToRemove != null)
+                {
+                    _context.Favorites.Remove(favoriteToRemove);
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, message = "Removed from favorites successfully!" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Favorite not found." });
+                }
+            }
+
+            return Json(new { success = false, message = "Error removing from favorites." });
+        }
+
+        public async Task<IActionResult> GetUpdatedFavorites()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var favoriteChampions = new List<Champion>();
+
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var userFavorites = _context.Favorites.Where(f => f.UserId.ToString() == userId);
+                favoriteChampions = await userFavorites.Select(f => f.Champion).ToListAsync();
+            }
+
+            return Json(favoriteChampions);
         }
 
         public IActionResult Privacy()

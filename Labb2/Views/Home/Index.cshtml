@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" href="~/css/styles.css" />
 
+
 <div class="text-center">
     <h3 class="display-4">LeagueChecker</h3>
 </div>
@@ -76,6 +77,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Right Half -->
     <div class="right-half">
         <div class="content-container">
             <!-- Sorting Label -->
@@ -140,21 +143,18 @@
             </div>
         </div>
     </div>
-
-
-
 </div>
 
 @section Scripts {
+    <script>
+        var addToFavoritesUrl = '@Url.Action("AddToFavorites", "Home")';
+        var removeFromFavoritesUrl = '@Url.Action("RemoveFromFavorites", "Home")';
+    </script>
     <script src="~/js/filtering.js"></script>
     <script src="~/js/search.js"></script>
     <script src="~/js/searchFavoriteChampions.js"></script>
     <script src="~/js/toggleSort.js"></script>
     <script src="~/js/toggleSortFavorite.js"></script>
-    <script>
-        var addToFavoritesUrl = '@Url.Action("AddToFavorites", "Home")';
-        var removeFromFavoritesUrl = '@Url.Action("RemoveFromFavorites", "Home")';
-    </script>
     <script src="~/js/addToFavorites.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 }
