@@ -3,17 +3,16 @@
     $.ajax({
         url: addToFavoritesUrl,
         type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ championId: championId }),
-        success: function (data) {
-            if (data.success) {
+        data: { championId: championId },
+        success: function (response) {
+            if (response.success) {
                 fetchUpdatedFavorites();
             } else {
-                console.error('Add to favorites failed:', data.message);
+                console.error('Add to favorites failed:', response.message);
             }
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error('Error adding to favorites:', textStatus, errorThrown);
+        error: function () {
+            console.error('Error adding to favorites');
         }
     });
 }
@@ -23,73 +22,79 @@ function removeFromFavorites(championId) {
     $.ajax({
         url: removeFromFavoritesUrl,
         type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ championId: championId }),
-        success: function (data) {
-            if (data.success) {
+        data: { championId: championId },
+        success: function (response) {
+            if (response.success) {
                 fetchUpdatedFavorites();
             } else {
-                console.error('Remove from favorites failed:', data.message);
+                console.error('Remove from favorites failed:', response.message);
             }
         },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error('Error removing from favorites:', textStatus, errorThrown);
+        error: function () {
+            console.error('Error removing from favorites');
         }
     });
 }
-
 
 function fetchUpdatedFavorites() {
     fetch('/Home/GetUpdatedFavorites')
         .then(response => response.json())
         .then(data => {
-            updateFavoritesGrid(data); // Function to update the grid with new data
+            console.log("Received data:", data); // Log data for debugging
+            updateFavoritesGrid(data);
         });
 }
 
 function updateFavoritesGrid(favorites) {
-    // Logic to update the favorites grid with new data
-
     // Clear existing favorite containers
-    document.querySelectorAll('.favorite-champion-container').forEach(container => {
-        container.innerHTML = ''; // Clear the existing content
-    });
+    ['favoriteContainerByName', 'favoriteContainerByNameDesc', 'favoriteContainerByReleaseDate', 'favoriteContainerByReleaseDateDesc']
+        .forEach(containerId => {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // Clear the existing content
 
-    // Populate each container with updated favorites
-    favorites.forEach(champion => {
-        // Create new favorite champion cell
-        let cell = createFavoriteCell(champion);
-
-        // Append cell to appropriate containers based on sorting
-        document.getElementById('favoriteContainerByName').appendChild(cell.cloneNode(true));
-        document.getElementById('favoriteContainerByNameDesc').appendChild(cell.cloneNode(true));
-        document.getElementById('favoriteContainerByReleaseDate').appendChild(cell.cloneNode(true));
-        document.getElementById('favoriteContainerByReleaseDateDesc').appendChild(cell.cloneNode(true));
-    });
+            // Repopulate with updated favorites
+            favorites.forEach(champion => {
+                let cell = createFavoriteCell(champion);
+                container.appendChild(cell);
+            });
+        });
 }
 
+
+
 function createFavoriteCell(champion) {
-    // Create elements for the champion cell
     let cell = document.createElement('div');
     cell.className = 'champion-cell';
-    cell.onclick = function () { removeFromFavorites(champion.ChampionId); };
+    cell.onclick = function () { removeFromFavorites(champion.championId); };
 
     let img = document.createElement('img');
-    img.src = champion.ImageUrl;
-    img.alt = champion.Name;
+    img.src = champion.imageUrl || '/path/to/valid/default/image.jpg'; // Replace with a valid default image path
+    img.alt = champion.name || 'Unknown Champion';
 
     let nameSpan = document.createElement('span');
     nameSpan.className = 'champion-name';
-    nameSpan.textContent = champion.Name;
+    nameSpan.textContent = champion.name || 'Unknown';
 
     let dateSpan = document.createElement('span');
     dateSpan.className = 'champion-release-date';
-    dateSpan.textContent = new Date(champion.ReleaseDate).toISOString().split('T')[0];
 
-    // Append elements to the cell
+    if (champion.releaseDate && !isNaN(new Date(champion.releaseDate).getTime())) {
+        // Parse the date as UTC
+        const releaseDate = new Date(champion.releaseDate + 'Z');
+        dateSpan.textContent = releaseDate.toISOString().split('T')[0];
+    } else {
+        dateSpan.textContent = 'Unknown Date';
+    }
+
     cell.appendChild(img);
     cell.appendChild(nameSpan);
     cell.appendChild(dateSpan);
 
     return cell;
 }
+
+
+
+
+
+

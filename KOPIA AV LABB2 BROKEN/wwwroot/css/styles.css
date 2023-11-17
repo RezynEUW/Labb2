@@ -69,11 +69,6 @@ button {
     align-items: center;
     cursor: pointer;
 }
-    .champion-cell:hover, .favorite-champion-cell:hover {
-        box-shadow: 0 0 10px #ffffff; /* white glow effect */
-    }
-
-
 
 img {
     width: 60px; /* Fixed width for images */
