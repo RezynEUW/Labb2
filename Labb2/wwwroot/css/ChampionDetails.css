@@ -1,0 +1,74 @@
+﻿body {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* White text */
+    /* ... other styles ... */
+}
+
+/* ChampionDetails.css */
+.champion-details-container {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* White text */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    max-width: 800px;
+    margin: auto;
+    text-align: center; /* Center all text within the container */
+}
+
+.champion-header {
+    margin-bottom: 20px;
+}
+
+    .champion-header h1 {
+        color: #ffffff; /* White text color */
+        margin-bottom: 10px;
+    }
+
+.champion-image {
+    width: 120px; /* Adjust as needed */
+    height: auto;
+    border-radius: 50%;
+    border: 2px solid #ffffff; /* White border */
+    display: block; /* Ensures the image is block level for centering */
+    margin: 0 auto; /* Centers the image */
+}
+
+.champion-info {
+    background-color: #333333; /* Dark background for info section */
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+    text-align: center; /* Center the text within champion-info */
+}
+
+    .champion-info h2, .champion-info h3 {
+        color: #ffffff; /* White text color */
+    }
+
+    .champion-info p {
+        color: #bbbbbb; /* Light grey color */
+    }
+
+    /* Styles for lists */
+    .champion-info ul {
+        list-style-type: none; /* Remove default list styling */
+        padding: 0;
+        margin: 0 auto; /* Center the list */
+    }
+
+    .champion-info li {
+        background-color: #444444; /* Slightly lighter background for list items */
+        padding: 5px 10px;
+        margin-bottom: 5px;
+        border-radius: 3px;
+        text-align: left; /* Left-align text in list items */
+        display: block; /* Makes each list item a block element */
+    }
+
+    /* Container for each section of champion info */
+    .champion-info div {
+        margin-bottom: 20px; /* Spacing between sections */
+    }
+
+/* Additional styles can be added here */

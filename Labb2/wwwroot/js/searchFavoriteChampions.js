@@ -1,10 +1,10 @@
 ﻿function searchFavoriteChampions() {
     var input, filter, cells, i, txtValue;
-    input = document.getElementById("searchFavoriteInput"); // ID for the search input of favorites
+    input = document.getElementById("searchFavoriteInput");
     filter = input.value.toUpperCase();
-    cells = document.getElementsByClassName("favorite-champion-cell"); // Class name for favorite champion cells
+    cells = document.getElementsByClassName("favorite-champion-cell");
 
-    // Loop through all cells in the favorites grid and hide those who don't match the search query
+    // Loop through all favorite cells and hide those who don't match the search query
     for (i = 0; i < cells.length; i++) {
         txtValue = cells[i].getElementsByClassName("champion-name")[0].textContent ||
             cells[i].getElementsByClassName("champion-name")[0].innerText;

@@ -1,10 +1,14 @@
-﻿public class ChampionClass
+﻿namespace Labb2.Models
 {
-    public int ChampionClassId { get; set; }
-    public int ChampionId { get; set; }
-    public int ClassId { get; set; }
+    public class ChampionClass
 
-    // Navigation properties
-    public Champion Champion { get; set; }
-    public Class Class { get; set; }
+    {
+        public int ChampionClassId { get; set; }
+        public int ChampionId { get; set; }
+        public int ClassId { get; set; }
+
+        // Navigation properties
+        public Champion Champion { get; set; }
+        public Class Class { get; set; }
+    }
 }

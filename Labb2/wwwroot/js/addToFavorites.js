@@ -64,7 +64,7 @@ function updateFavoritesGrid(favorites) {
 
 function createFavoriteCell(champion) {
     let cell = document.createElement('div');
-    cell.className = 'champion-cell';
+    cell.className = 'favorite-champion-cell';
     cell.onclick = function () { removeFromFavorites(champion.championId); };
 
     let img = document.createElement('img');
@@ -92,7 +92,6 @@ function createFavoriteCell(champion) {
 
     return cell;
 }
-
 
 
 

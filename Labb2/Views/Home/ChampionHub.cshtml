@@ -1,0 +1,34 @@
+﻿@model Labb2.Models.ChampionViewModel
+@{
+    ViewData["Title"] = "Champion Hub";
+}
+
+<style>
+    .champion-cell-link {
+        text-decoration: none; /* Removes the underline */
+        color: inherit; /* Keeps the text color consistent with the rest of the content */
+    }
+</style>
+
+<link rel="stylesheet" href="~/css/styles.css" />
+<div class="main-container">
+    <div class="left-half">
+        <div class="content-container">
+            <div id="championContainerByName" class="champion-container">
+                @foreach (var champion in Model.ChampionsByName)
+                {
+                    <a href="@Url.Action("ChampionDetails", "Home", new { championId = champion.ChampionId })" class="champion-cell-link">
+                        <div class="champion-cell" id="specialgrid">
+                            <img src="@champion.ImageUrl" alt="@champion.Name" />
+                            <span class="champion-name">@champion.Name</span>
+                            <span class="champion-release-date">@champion.ReleaseDate.ToString("yyyy-MM-dd")</span>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <!-- Add any specific scripts for this page if necessary -->
+}

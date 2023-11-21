@@ -158,9 +158,117 @@ namespace Labb2.Controllers
             return Json(favoriteChampions);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> ChampionHub()
         {
-            return View();
+            var champions = await _context.Champions.OrderBy(c => c.Name).ToListAsync();
+
+            var viewModel = new ChampionViewModel
+            {
+                ChampionsByName = champions
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult ChampionDetails(int championId)
+        {
+            var champion = _context.Champions
+                                   .Include(c => c.ChampionRoles)
+                                       .ThenInclude(cr => cr.Role)
+                                   .Include(c => c.ChampionClasses)
+                                       .ThenInclude(cc => cc.Class)
+                                   .FirstOrDefault(c => c.ChampionId == championId);
+
+            if (champion == null)
+            {
+                return NotFound();
+            }
+
+            return View(champion);
+        }
+
+        public IActionResult Form()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var viewModel = new FormViewModel
+            {
+                Feedbacks = userId != null
+                            ? _context.Feedback.Where(f => f.UserId == int.Parse(userId)).ToList()
+                            : new List<Feedback>()
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitFeedback(FormViewModel model)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Error");
+            }
+
+            if (ModelState.IsValid)
+            {
+                var newFeedback = new Feedback
+                {
+                    UserFeedback = model.NewUserFeedback,
+                    UserId = int.Parse(userId) // UserId is set to the current user's ID
+                };
+
+                _context.Feedback.Add(newFeedback);
+                await _context.SaveChangesAsync();
+
+                // Prepare the updated model to reload the same page with the new feedback
+                var updatedViewModel = new FormViewModel
+                {
+                    Feedbacks = await _context.Feedback
+                                              .Where(f => f.UserId == int.Parse(userId))
+                                              .ToListAsync()
+                };
+
+                return View("Form", updatedViewModel);
+            }
+
+            // If model state is not valid, reload the same page with the existing model
+            model.Feedbacks = await _context.Feedback
+                                            .Where(f => f.UserId == int.Parse(userId))
+                                            .ToListAsync();
+            return View("Form", model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteFeedback(int id)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var feedbackToDelete = await _context.Feedback.FirstOrDefaultAsync(f => f.FeedbackId == id);
+            if (feedbackToDelete != null)
+            {
+                _context.Feedback.Remove(feedbackToDelete);
+                await _context.SaveChangesAsync();
+            }
+
+            // Redirect back to the feedback form or management page
+            return RedirectToAction("Form");
+        }
+
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

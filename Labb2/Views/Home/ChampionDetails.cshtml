@@ -1,0 +1,45 @@
+﻿@model Labb2.Models.Champion
+
+@{
+    ViewData["Title"] = Model.Name + " - Champion Details";
+}
+
+<link rel="stylesheet" href="~/css/ChampionDetails.css" />
+
+<div class="champion-details-container">
+
+    <!-- Champion Header -->
+    <div class="champion-header">
+        <h1>@Model.Name</h1>
+        <img src="@Model.ImageUrl" alt="@Model.Name" class="champion-image" />
+    </div>
+
+    <!-- Champion Information -->
+    <div class="champion-info">
+        <h2>Champion Details</h2>
+        <p><strong>Release Date:</strong> @Model.ReleaseDate.ToString("MMMM dd, yyyy")</p>
+
+        <!-- Champion Roles -->
+        <div>
+            <h3>Roles:</h3>
+            <ul>
+                @foreach (var championRole in Model.ChampionRoles)
+                {
+                    <li>@championRole.Role.RoleName</li>
+                }
+            </ul>
+        </div>
+
+        <!-- Champion Classes -->
+        <div>
+            <h3>Classes:</h3>
+            <ul>
+                @foreach (var championClass in Model.ChampionClasses)
+                {
+                    <li>@championClass.Class.ClassName</li>
+                }
+            </ul>
+        </div>
+
+    </div>
+</div>

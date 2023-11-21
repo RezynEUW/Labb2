@@ -42,4 +42,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Login}/{id?}");
 
+// Add a new route for champion details
+app.MapControllerRoute(
+    name: "championDetails",
+    pattern: "Champions/{championId:int}",
+    defaults: new { controller = "Home", action = "ChampionDetails" });
+
 app.Run();

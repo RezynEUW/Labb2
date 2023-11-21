@@ -63,15 +63,37 @@ button {
 
 .champion-cell, .favorite-champion-cell {
     text-align: center;
-    min-width: 60px; /* Minimum width for each cell */
+    min-width: 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and shadow */
 }
-    .champion-cell:hover, .favorite-champion-cell:hover {
-        box-shadow: 0 0 10px #ffffff; /* white glow effect */
+
+    .champion-cell img, .favorite-champion-cell img {
+        width: 60px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform */
     }
+
+.left-half .champion-cell:hover img {
+    transform: scale(1.05); /* Slightly increase the size of the image on hover */
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Green glow effect */
+}
+
+/* Hover effect for champion cells in the right half (red glow) */
+.right-half .favorite-champion-cell:hover img {
+    transform: scale(0.90); /* Slightly increase the size of the image on hover */
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Red glow effect */
+}
+
+.right-half .champion-cell:hover img {
+    transform: scale(0.90); /* Slightly increase the size of the image on hover */
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Red glow effect */
+}
 
 
 
@@ -94,16 +116,39 @@ img {
 
 
 .main-container {
+    margin-top: 70px;
     display: flex; /* Use flexbox for layout */
     min-height: calc(100vh - 60px); /* Full height minus the header height */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Very light border for a refined edge */
+    background: linear-gradient(145deg, #121212, #121212); /* Darker gradient for visual depth */
+    background-size: 400% 400%;
+    animation: GradientAnimation 15s ease infinite; /* Smooth gradient animation */
+    padding: 20px; /* Spacing insidex§ the container */
+    border-radius: 10px; /* Rounded corners for a modern look */
+    overflow: hidden; /* Ensures the child elements do not overflow */
 }
+
+@keyframes GradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
 
 .left-half, .right-half {
     flex: 1; /* Equal width for both halves */
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: flex-start; /* Center vertically */
-    background-color: #151515; /* Same background color for both halves */
 }
 
 .content-container {

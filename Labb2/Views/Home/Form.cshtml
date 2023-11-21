@@ -1,0 +1,64 @@
+﻿@model Labb2.Models.FormViewModel
+@{
+    ViewData["Title"] = "Feedback Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Feedback.css" />
+
+<div class="metadata-display">
+    <h1>Feedback Management</h1>
+</div>
+
+<!-- Feedback Submission Form -->
+<div class="form-container">
+    <h2>Submit Your Feedback</h2>
+    <form asp-action="SubmitFeedback" method="post">
+        <div class="form-group">
+            <label for="feedback">Your Feedback:</label>
+            <textarea id="feedback" name="NewUserFeedback" class="form-control" required></textarea>
+            <small class="form-text text-muted">Please enter your feedback here.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<!-- Feedback List -->
+<div class="feedback-list-container">
+    <h2>Manage Feedback</h2>
+    @if (Model.Feedbacks != null && Model.Feedbacks.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Feedback ID</th>
+                    <th scope="col">Feedback</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var feedback in Model.Feedbacks)
+                {
+                    <tr>
+                        <td>@feedback.FeedbackId</td>
+                        <td>@feedback.UserFeedback</td>
+                        <td>
+                            <!-- Delete Feedback Form -->
+                            <form asp-action="DeleteFeedback" asp-route-id="@feedback.FeedbackId" method="post">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No feedback available to display.</p>
+    }
+</div>
+
+@section Scripts {
+    <!-- JavaScript for client-side validation, if necessary -->
+}

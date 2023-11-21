@@ -48,5 +48,12 @@ CREATE TABLE Favorites (
     UNIQUE (UserId, ChampionId)
 );
 
+CREATE TABLE Feedback (
+    FeedbackId INT PRIMARY KEY IDENTITY(1,1),
+    UserFeedback NVARCHAR(MAX) NOT NULL,
+    UserId INT NOT NULL,
+    FOREIGN KEY (UserId) REFERENCES Users(UserId)
+);
+
 
 
